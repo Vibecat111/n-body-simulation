@@ -12,11 +12,11 @@
       fullscreen: true,
       autostart: true
     }).appendTo(document.body);
-    two.renderer.domElement.style.background = 'rgb(0, 0, 0)';
+    two.renderer.domElement.style.background = 'rgb(50, 50, 50)';
 
 
     let circle = class {
-      constructor(x, y, mass, radius, vx, vy, ex, ey) {
+      constructor(x, y, mass, radius, vx, vy) {
         this.x = x;
         this.y = y;
         this.mass = mass; 
@@ -25,6 +25,8 @@
         this.velocityY = vy
         this.ex = 0
         this.ey = 0
+        this.px = 0
+        this.py = 0
       }
     }
     const pageX = window.innerWidth || document.documentElement.clientWidth ||
@@ -33,8 +35,8 @@
       document.body.clientHeight;
 
 
-    let circle1 = new circle(400, 400, 10, 20, 0.5, -0.5)
-    let circle2 = new circle(500, 500, 10, 20, -0.5, 0.5)
+    let circle1 = new circle(400, 400, 10, 20, 0.6, -0.6)
+    let circle2 = new circle(500, 500, 0, 20, 0, 0)
     console.log(circle1.x)
     const rcircle1 = two.makeCircle(circle1.x, circle1.y, circle1.radius, 20)
     const rcircle2 = two.makeCircle(circle2.x, circle2.y, circle2.radius, 20)
@@ -43,7 +45,11 @@
   
 
     function updatecircle() {
-
+      circle1.px = rcircle1.translation.x
+      circle1.py = rcircle1.translation.y
+      circle2.px = rcircle2.translation.x
+      circle2.py = rcircle2.translation.y
+     
       circle1.ex = rcircle2.translation.x
       circle1.ey = rcircle2.translation.y
       circle2.ex = rcircle1.translation.x
@@ -70,13 +76,22 @@
       console.log(dy1)
     }
 
-    two.bind('update', function () {
 
-
+let fp = 0
+    two.bind('update', function (frameCount, timeDelta) {
+console.log(fp)
+      
+      
       updatecircle()
+  if (fp % 60 == 0){
+      two.makeCircle(circle1.px, circle1.py, 5)
+       two.makeCircle(circle2.px, circle2.py, 5)}
+  
+       fp++
 
-
-    });
+     
+      
+      });
   </script>
 </body>
 
