@@ -1,77 +1,86 @@
-
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <script src="js/two.min.js"></script>
-  </head>
-  <body>
-    <script>
-      var two = new Two({
-        fullscreen: true,
-        autostart: true
-      }).appendTo(document.body);
-      two.renderer.domElement.style.background = 'rgb(0, 0, 0)';
+
+<head>
+  <meta charset="utf-8">
+  <script src="js/two.min.js"></script>
+</head>
+
+<body>
+  <script>
+    var two = new Two({
+      fullscreen: true,
+      autostart: true
+    }).appendTo(document.body);
+    two.renderer.domElement.style.background = 'rgb(0, 0, 0)';
 
 
-      let circle = class {
-  constructor(x, y, mass, radius, vx, vy,ex,ey) {
-    this.x = x;
-    this.y = y;
-    this.mass = mass;
-    this.radius = radius
-    this.velocityX = vx
-    this.velocityY = vy
-    this.ex = 0
-    this.ey = 0
-  }
-}
-const pageX  = window.innerWidth || document.documentElement.clientWidth || 
-document.body.clientWidth;
-const pageY = window.innerHeight|| document.documentElement.clientHeight|| 
-document.body.clientHeight;
+    let circle = class {
+      constructor(x, y, mass, radius, vx, vy, ex, ey) {
+        this.x = x;
+        this.y = y;
+        this.mass = mass;
+        this.radius = radius
+        this.velocityX = vx
+        this.velocityY = vy
+        this.ex = 0
+        this.ey = 0
+      }
+      get calcmass() {
+        return this.mass
+      }
+    }
+    const pageX = window.innerWidth || document.documentElement.clientWidth ||
+      document.body.clientWidth;
+    const pageY = window.innerHeight || document.documentElement.clientHeight ||
+      document.body.clientHeight;
 
 
-let circle1 = new circle(50,50,100,20,0,0)
-let circle2 = new circle(500,500,100,20,0,0)
-console.log(circle1.x)
-     const rcircle1 = two.makeCircle(circle1.x,circle1.y,circle1.radius,20)
-     const rcircle2 = two.makeCircle(circle2.x,circle2.y,circle2.radius,20)
+    let circle1 = new circle(400, 400, 100, 20, 0.1, -0.1)
+    let circle2 = new circle(500, 500, 100, 20, -0.1, 0.1)
+    console.log(circle1.x)
+    const rcircle1 = two.makeCircle(circle1.x, circle1.y, circle1.radius, 20)
+    const rcircle2 = two.makeCircle(circle2.x, circle2.y, circle2.radius, 20)
 
-     function updatecircle() {
-       circle1.ex = rcircle2.translation.x
-       circle1.ey = rcircle2.translation.y
-       circle2.ex = rcircle1.translation.x
-       circle2.ey = rcircle1.translation.y
 
-       var dx1 = ( rcircle2.translation.x - rcircle1.translation.x);
+  
+
+    function updatecircle() {
+
+      circle1.ex = rcircle2.translation.x
+      circle1.ey = rcircle2.translation.y
+      circle2.ex = rcircle1.translation.x
+      circle2.ey = rcircle1.translation.y
+
+      var dx1 = (rcircle2.translation.x - rcircle1.translation.x);
       var dy1 = (rcircle2.translation.y - rcircle1.translation.y);
       var dx2 = (rcircle1.translation.x - rcircle2.translation.x);
       var dy2 = (rcircle1.translation.y - rcircle2.translation.y);
       var distance1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
       var distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-      var ax1= 10 * dx1 / Math.pow(distance1, 3);
-           var ay1 = 10 * dy1 / Math.pow(distance1, 3);
-           var ax2= 10 * dx2 / Math.pow(distance2, 3);
-           var ay2 = 10 * dy2 / Math.pow(distance2, 3);
-           circle1.velocityX += ax1 + 0.00005;
-           circle1.velocityY += ay1 + 0.00002;
-           circle2.velocityX += ax2;
-           circle2.velocityY += ay2;
-           rcircle1.translation.x += circle1.velocityX;
-           rcircle1.translation.y += circle1.velocityY; 
-           rcircle2.translation.x += circle2.velocityX;
-           rcircle2.translation.y += circle2.velocityY; 
-           console.log(dy1)
-     }
+      var ax1 = 10 * dx1 / Math.pow(distance1, 3);
+      var ay1 = 10 * dy1 / Math.pow(distance1, 3);
+      var ax2 = 10 * dx2 / Math.pow(distance2, 3);
+      var ay2 = 10 * dy2 / Math.pow(distance2, 3);
+      circle1.velocityX += ax1
+      circle1.velocityY += ay1
+      circle2.velocityX += ax2;
+      circle2.velocityY += ay2;
+      rcircle1.translation.x += circle1.velocityX;
+      rcircle1.translation.y += circle1.velocityY;
+      rcircle2.translation.x += circle2.velocityX;
+      rcircle2.translation.y += circle2.velocityY;
+      console.log(dy1)
+    }
 
-   two.bind('update', function() {
-    
-  
-    updatecircle()
+    two.bind('update', function () {
 
 
-      });
-    </script>
-  </body>
+      updatecircle()
+
+
+    });
+  </script>
+</body>
+
 </html>
