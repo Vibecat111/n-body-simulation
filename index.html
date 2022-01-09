@@ -1,0 +1,39 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="js/two.min.js"></script>
+  </head>
+  <body>
+    <script>
+      var two = new Two({
+        fullscreen: true,
+        autostart: true
+      }).appendTo(document.body);
+      two.renderer.domElement.style.background = 'rgb(0, 0, 0)';
+
+
+      let circle = class {
+  constructor(x, y, mass, radius) {
+    this.x = x;
+    this.y = y;
+    this.mass = mass;
+    this.radius = radius
+  }
+}
+
+let circle1 = new circle(50,50,100,20)
+let circle2 = new circle(500,500,100,20)
+console.log(circle1.x)
+     const rcircle1 = two.makeCircle(circle1.x,circle1.y,circle1.radius,20)
+     const rcircle2 = two.makeCircle(circle2.x,circle2.y,circle2.radius,20)
+
+
+   two.bind('update', function() {
+     rcircle1.translation.x = rcircle1.translation.x + 1
+        rcircle1.rotation += 0.001;
+      });
+    </script>
+  </body>
+</html>
