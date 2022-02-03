@@ -13,8 +13,6 @@
       autostart: true
     }).appendTo(document.body);
     two.renderer.domElement.style.background = 'rgb(50, 50, 50)';
-
-
     let circle = class {
       constructor(x, y, mass, radius, vx, vy, id) {
         this.x = x;
@@ -22,140 +20,60 @@
         this.radius = radius
         this.velocityX = vx
         this.velocityY = vy
-        this.ex = 0
-        this.ey = 0
-        this.force = 10
-        this.mass = mass // MORE == LESS MASS | FIX THAT YOU STUPID FUCK
-        this.path = []
+        this.mass = mass
         this.id = id
-
       }
-
     }
-    const pageX = window.innerWidth || document.documentElement.clientWidth ||
-      document.body.clientWidth;
-    const pageY = window.innerHeight || document.documentElement.clientHeight ||
-      document.body.clientHeight;
 
+    const circles = []
+    const rcircles = []
 
-
-
-const circles = []
-const rcircles = []
-
-/* Create three particles and add them to the list of elements. */
-
-circles.push(new circle(2900, 1800, 1, 20, 0.2,0.2, 1))
-circles.push(new circle(1900, 1800, 1, 20, 0,0, 2))
-circles.push(new circle(900, 1800, 1, 20, 0,0, 2))
-circles.push(new circle(0, 1800, 1, 2000, 0,0, 2))
-
-
-
-
-
+    circles.push(new circle(2900, 1800, 1, 20, 0.2, 0.2, 1))
+    circles.push(new circle(2800, 1800, 1, 20, 0, 0, 2))
+//circles.push(new circle(900, 1800, 1, 20, 0, 0, 3))
+   // circles.push(new circle(0, 1800, 1, 20, 0, 0, 4))
 
     rcircles.push(two.makeCircle(2900, 1800, 20, 20))
-    rcircles.push(two.makeCircle(1900, 1800, 20, 20))
-    rcircles.push(two.makeCircle(900, 1800, 20, 20))
-    rcircles.push(two.makeCircle(0, 1800, 20, 20))
+    rcircles.push(two.makeCircle(2500, 1800, 20, 20))
+  //  rcircles.push(two.makeCircle(900, 1800, 20, 20))
+   // rcircles.push(two.makeCircle(0, 1800, 20, 20))
 
-
-const g = 6.674 * Math.E - 11
     function updatecircle() {
+      for (let i = 0; i < circles.length; i++) {
+        for (let j = 0; j < circles.length; j++) {
+          if (circles[i].id != circles[j].id) {
 
-for (let i = 0; i < circles.length ; i++) {
-  console.log("b")
-  for (let j = 0; j < circles.length; j++) {
-    console.log("a")
-  if (circles[i].id != circles[j].id) {
- 
-    const planet = circles[i]
-    const planetren = rcircles[i]
-    const ref = circles[j]
-    const refren = rcircles[j]
+            const planet = circles[i]
+            const planetren = rcircles[i]
+            const ref = circles[j]
+            const refren = rcircles[j]
 
-    const rx = refren.translation.x - planetren.translation.x
-    const ry = refren.translation.y - planetren.translation.y
-    var r = Math.sqrt(rx * rx + ry * ry);
+            const rx = refren.translation.x - planetren.translation.x
+            const ry = refren.translation.y - planetren.translation.y
+            const rx2 = planetren.translation.x - refren.translation.x
+            const ry2 = planetren.translation.y - refren.translation.y
+            var r = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2); // distance between centers of mass
 
+            const g = 6.674 * Math.E - 11// gravitational constant
+  const step = g * ((planet.mass * ref.mass) / Math.pow(r, 1))
+    const fx = (step * rx)
+    const fy = (step * ry)
 
-   const g = 6.674 * Math.E - 11// gravitational stuff
-  const step = g * (planet.mass / Math.pow(r, 2))
-    const fx = planet.mass * (step * rx)
-    const fy = planet.mass * (step * ry)
+            planet.velocityX += fx
+            planet.velocityY += fy
+            console.log(rx)
 
-    
+            planetren.translation.x += planet.velocityX
+            planetren.translation.y += planet.velocityY
 
-    planet.velocityX += fx
-    planet.velocityY += fy
-    console.log(rx)
-
-    planetren.translation.x += planet.velocityX
-    planetren.translation.y +=  planet.velocityY
-
-
-  } else continue;
-  }
-}
-
-      // gravity field setup
-
-    
-/*
-      
-      const rx1 = rcircle2.translation.x - rcircle1.translation.x
-      const ry1 = rcircle2.translation.y - rcircle1.translation.y
-      const rx2 = rcircle1.translation.x - rcircle2.translation.x
-      const ry2 = rcircle1.translation.y - rcircle2.translation.y
-    
-      var r1 = Math.sqrt(rx1 * rx1 + ry1 * ry1);
-      var r2 = Math.sqrt(rx2 * rx2 + ry2 * ry2);
-
-      const grx1 = gr(circle1.mass, rx1, r1)
-      const gry1 = gr(circle1.mass, ry1, r1)
-
-      const grx2 = gr(circle2.mass, rx2, r2)
-      const gry2 = gr(circle2.mass, ry2, r2)
-
-
-      const fx1 = circle1.mass * grx1
-      const fy1 = circle1.mass * gry1
-   
-      const fx2 = circle2.mass * grx2
-      const fy2 = circle2.mass * gry2
-
-
-
-      circle1.velocityX += fx1
-      circle1.velocityY += fy1
-      circle2.velocityX += fx2
-      circle2.velocityY += fy2
-      rcircle1.translation.x += circle1.velocityX
-      rcircle1.translation.y +=  circle1.velocityY
-
-      rcircle2.translation.x +=  circle2.velocityX
-      rcircle2.translation.y +=  circle2.velocityY
-      */
-     
+          } else continue;
+        }
+      }
     }
-
-let interval = 1/30
-let fp = 0
     two.bind('update', function (frameCount, timeDelta) {
 
-   
-    
-        updatecircle()
-      
-
-    
-  
-       fp++
-
-     
-      
-      });
+      updatecircle()
+    });
   </script>
 </body>
 
