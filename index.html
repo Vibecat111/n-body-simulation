@@ -55,7 +55,7 @@
             var r = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2); // distance between centers of mass
 
             const g = 6.674 * Math.E - 11// gravitational constant
-  const step = g * ((planet.mass * ref.mass) / Math.pow(r, 1))
+  const step = (g * ((planet.mass * ref.mass)) / (r, 1))
     const fx = (step * rx)
     const fy = (step * ry)
 
