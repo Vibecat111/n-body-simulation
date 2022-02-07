@@ -26,17 +26,24 @@
         "radius": 20,
         "velocityX": 0,
         "velocityY": 0,
-        "id": 0
       },
       // copy paste these blocks for more planets and alter their values(don't forget the comma)
       {
-        "x": 700,
-        "y": 500,
+        "x": 1000,
+        "y": 250,
         "mass": 0.01,
         "radius": 9,
-        "velocityX": 0.1,
-        "velocityY": 0.46,
-        "id": 0
+        "velocityX": 0.125,
+        "velocityY": 0,
+      },
+
+      {
+        "x": 1000,
+        "y": 750,
+        "mass": 0.02,
+        "radius": 9,
+        "velocityX": -0.125,
+        "velocityY": 0,
       },
  
    
@@ -45,16 +52,7 @@
 
     // getting the object which has the highest id
    
-    // assigning ids to objects
-    for (let i = 0; i < circles.length; i++) {
 
-      const hid = circles.reduce(function (max, x) {
-      return x.id > max.id ? x : max;
-    })
-      circles[i].id = hid.id + 1
-      console.log(circles[i].id)
-
-    }
 
 
     // global variables
@@ -63,27 +61,13 @@
 
 
     // You can alter these variables for different behaviours
-    const g = 10 // gravitational constant
+    const g = 1 // gravitational constant
 
 
     // for loop for renderer objects
     for (let i = 0; i < circles.length; i++) {
       rcircles.push(two.makeCircle(circles[i].x, circles[i].y, circles[i].radius, 1))
     }
-
-
-
-    // fast approximation of square root
-    function sqrt(num) {
-      // divide by 3 for first guess 
-      var lastGuess, guess = num / 3;
-      // loop until accurate
-      do {
-        lastGuess = guess;
-        guess = (num / guess + guess) / 2;
-      } while (Math.abs(lastGuess - guess) > 5e-15);
-      return guess;
-    };
 
     // update the screen
     function updatecircle() {
@@ -98,7 +82,7 @@
           const refren = rcircles[j]
 
           // checks if whether the planet id is the same as reference
-          if (circles[i].id != circles[j].id) {
+          if (rcircles[i].id != rcircles[j].id) {
 
 
 
@@ -117,8 +101,8 @@
             var r2 = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2);
 
             // calculate unit vectors
-            const rhatx = rx / sqrt(r2)
-            const rhaty = ry / sqrt(r2)
+            const rhatx = rx / Math.sqrt(r2)
+            const rhaty = ry / Math.sqrt(r2)
 
             // calculate acceleration
             const stepx = (g * ((ref.mass)) / r2) * rhatx
