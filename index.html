@@ -14,20 +14,31 @@
     }).appendTo(document.body);
     two.renderer.domElement.style.background = 'rgb(50, 50, 50)';
 
+// planets
+// put as many as you'd like!(costs performance exponentially)
+const planets = [
+    {
+        "x": 500,
+        "y": 500,
+        "mass": 10,
+        "radius": 20,
+        "velocityX": 0.15,
+        "velocityY": 0.2
+    },
+    // copy paste these blocks for more planets and alter their values(don't forget the comma)
+    {
+        "x": 1000,
+        "y": 500,
+        "mass": 10,
+        "radius": 20,
+        "velocityX": -0.15,
+        "velocityY": -0.2
+    },
+ 
+]
 
-    // circle constructor
-    let circle = class {
-      constructor(x, y, mass, radius, vx, vy, id) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius
-        this.velocityX = vx
-        this.velocityY = vy
-        this.mass = mass
-        this.id = id
+console.log(planets)
 
-      }
-    }
 
    // You can alter these variables for different behaviours
    const g = 10 // gravitational constant
@@ -46,22 +57,43 @@
     }
 
 
-    // constructor
-    /* example: 
+   // preparing the planets
 
-    circles.push(new circle(x, y, mass, radius, velocityX, velocityY, idd() ))
+ 
+
+    // circle constructor
+    let circle = class {
+      constructor(x, y, mass, radius, vx, vy, id) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius
+        this.velocityX = vx
+        this.velocityY = vy
+        this.mass = mass
+        this.id = id
+
+      }
+    }
 
 
-    Put as many as you like!(Costs performance exponentially)
+// set up planets
+    for(i = 0; i < planets.length; i++) {
+    circles.push(new circle(planets[i].x, planets[i].y, planets[i].mass, planets[i].radius, planets[i].velocityX, planets[i].velocityY, idd()))
+    }
+
+    /*
+    circles.push(new circle(1000, 500, 8.1, 20, -0.15, -0.20, idd()))
+    circles.push(new circle(100, 500, 8.1, 20, 0.15, 0.20, idd()))
     */
 
-    circles.push(new circle(1000, 500, 8.1, 20, -0.15, -0.2, idd()))
-    circles.push(new circle(500, 500, 8.1, 20, 0.15, 0.2, idd()))
+  
+    console.log(circles)
 
     // for loop for renderer objects
     for (let i = 0; i < circles.length; i++) {
       rcircles.push(two.makeCircle(circles[i].x, circles[i].y, circles[i].radius, 20))
     }
+    console.log(rcircles)
 
  // update the screen
     function updatecircle() {
@@ -69,13 +101,15 @@
       for (let i = 0; i < circles.length; i++) {
         for (let j = 0; j < circles.length; j++) {
 
-          // checks if whether the planet id is the same as reference
-          if (circles[i].id != circles[j].id) {
-            // variables
-            const planet = circles[i]
+          const planet = circles[i]
             const planetren = rcircles[i]
             const ref = circles[j]
             const refren = rcircles[j]
+
+          // checks if whether the planet id is the same as reference
+          if (circles[i].id != circles[j].id) {
+            // variables
+           
 
             // get distance from reference to planet
 
@@ -122,7 +156,11 @@
             planetren.translation.x += planet.velocityX
             planetren.translation.y += planet.velocityY
 
-          } else continue; // if the id is the same, continue to other reference
+          } else{
+            planetren.translation.x += planet.velocityX
+            planetren.translation.y += planet.velocityY
+            continue;
+          } // if the id is the same, continue to other reference
         }
       }
     }
@@ -148,7 +186,7 @@
             tarray.push(two.makeCircle(rcircles[c].translation.x, rcircles[c].translation.y, 3, 20))
           }
           // while tarray is longer than 20 objects
-          while (tarray.length > 20) {
+          while (tarray.length > 10 * circles.length) {
             // remove the last element from the array
             let last = tarray.shift()
             console.log(last)

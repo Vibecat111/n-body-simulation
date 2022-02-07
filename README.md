@@ -1,4 +1,12 @@
 # n-body-simulation
-yeah so i made this in js, it's very simple
-if anyone finds this and knows some shit please take a look at this:
-1. if you increase a planets mass its pull increases but so does it get pulled faster
+# Very simple n body model made in js
+It is quite slow because it uses quite precise calculations. But it's fine unless you have a potato device
+
+Some parts of it are probably(Definetely) calculated wrong, but i don't know how to fix them properly.
+
+# To open, just double click on index.html
+# edit the planets and their speeds at the top of the html
+
+
+
+
