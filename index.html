@@ -27,7 +27,6 @@
         "velocityX": 0,
         "velocityY": 0,
       },
-      // copy paste these blocks for more planets and alter their values(don't forget the comma)
       {
         "x": 1000,
         "y": 250,
@@ -46,15 +45,9 @@
         "velocityY": 0,
       },
  
-   
-
     ]
 
-    // getting the object which has the highest id
    
-
-
-
     // global variables
     const rcircles = []
     let tarray = []
@@ -84,8 +77,6 @@
           // checks if whether the planet id is the same as reference
           if (rcircles[i].id != rcircles[j].id) {
 
-
-
             // get distance from reference to planet
 
             const rx = refren.translation.x - planetren.translation.x
@@ -94,9 +85,7 @@
 
             const rx2 = planetren.translation.x - refren.translation.x
             const ry2 = planetren.translation.y - refren.translation.y
-
-
-
+            
             // get distance2 between centers of mass
             var r2 = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2);
 
@@ -121,11 +110,7 @@
             planetren.translation.x += planet.velocityX
             planetren.translation.y += planet.velocityY
 
-          } else {
-
-
-            continue;
-          } // if the id is the same, continue to other reference
+          } else continue; // if the id is the same, continue to other reference
         }
       }
     }
