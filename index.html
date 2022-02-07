@@ -8,11 +8,13 @@
 
 <body>
   <script>
+  "use strict";
     var two = new Two({
       fullscreen: true,
       autostart: true
     }).appendTo(document.body);
     two.renderer.domElement.style.background = 'rgb(50, 50, 50)';
+    two.renderer.domElement.style.position = 'absolute';
 
 
     // planets
