@@ -20,31 +20,34 @@
     let circles = [{
         "x": 500,
         "y": 500,
-        "mass": 10,
+        "mass": 100,
         "radius": 20,
-        "velocityX": -0.15,
-        "velocityY": -0.20,
+        "velocityX": 0,
+        "velocityY": 0,
         "id": 0
       },
       // copy paste these blocks for more planets and alter their values(don't forget the comma)
       {
         "x": 1000,
         "y": 500,
-        "mass": 10,
+        "mass": 5,
         "radius": 20,
-        "velocityX": 0.15,
-        "velocityY": 0.20,
+        "velocityX": 10,
+        "velocityY": 10,
         "id": 0
       },
+   
 
     ]
 
     // getting the object which has the highest id
-    const hid = circles.reduce(function (max, x) {
-      return x.id > max.id ? x : max;
-    })
+   
     // assigning ids to objects
     for (let i = 0; i < circles.length; i++) {
+
+      const hid = circles.reduce(function (max, x) {
+      return x.id > max.id ? x : max;
+    })
       circles[i].id = hid.id + 1
       console.log(circles[i].id)
 
@@ -57,7 +60,7 @@
 
 
     // You can alter these variables for different behaviours
-    const g = 10 // gravitational constant
+    const g = 100 // gravitational constant
 
 
     // for loop for renderer objects
