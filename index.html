@@ -13,6 +13,9 @@
       autostart: true
     }).appendTo(document.body);
     two.renderer.domElement.style.background = 'rgb(50, 50, 50)';
+
+
+    // circle constructor
     let circle = class {
       constructor(x, y, mass, radius, vx, vy, id) {
         this.x = x;
@@ -22,56 +25,140 @@
         this.velocityY = vy
         this.mass = mass
         this.id = id
+
       }
     }
 
+   // You can alter these variables for different behaviours
+   const g = 10 // gravitational constant
+
+
+
+    // global variables
     const circles = []
     const rcircles = []
+    let tarray = []
 
-    circles.push(new circle(2900, 1800, 1, 20, 0.2, 0.2, 1))
-    circles.push(new circle(2800, 1800, 1, 20, 0, 0, 2))
-//circles.push(new circle(900, 1800, 1, 20, 0, 0, 3))
-   // circles.push(new circle(0, 1800, 1, 20, 0, 0, 4))
+    // gets the id for the object
+    const idd = () => {
+      !circles.length ? d = 1 : d = circles.length + 1
+      return d
+    }
 
-    rcircles.push(two.makeCircle(2900, 1800, 20, 20))
-    rcircles.push(two.makeCircle(2500, 1800, 20, 20))
-  //  rcircles.push(two.makeCircle(900, 1800, 20, 20))
-   // rcircles.push(two.makeCircle(0, 1800, 20, 20))
 
+    // constructor
+    /* example: 
+
+    circles.push(new circle(x, y, mass, radius, velocityX, velocityY, idd() ))
+
+
+    Put as many as you like!(Costs performance exponentially)
+    */
+
+    circles.push(new circle(1000, 500, 8.1, 20, -0.15, -0.2, idd()))
+    circles.push(new circle(500, 500, 8.1, 20, 0.15, 0.2, idd()))
+
+    // for loop for renderer objects
+    for (let i = 0; i < circles.length; i++) {
+      rcircles.push(two.makeCircle(circles[i].x, circles[i].y, circles[i].radius, 20))
+    }
+
+ // update the screen
     function updatecircle() {
+      // create 2 for loops for planet AND reference
       for (let i = 0; i < circles.length; i++) {
         for (let j = 0; j < circles.length; j++) {
-          if (circles[i].id != circles[j].id) {
 
+          // checks if whether the planet id is the same as reference
+          if (circles[i].id != circles[j].id) {
+            // variables
             const planet = circles[i]
             const planetren = rcircles[i]
             const ref = circles[j]
             const refren = rcircles[j]
 
+            // get distance from reference to planet
+
             const rx = refren.translation.x - planetren.translation.x
             const ry = refren.translation.y - planetren.translation.y
+            // get distance from planet to reference
+
             const rx2 = planetren.translation.x - refren.translation.x
             const ry2 = planetren.translation.y - refren.translation.y
-            var r = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2); // distance between centers of mass
 
-            const g = 6.674 * Math.E - 11// gravitational constant
-  const step = (g * ((planet.mass * ref.mass)) / (r, 1))
-    const fx = (step * rx)
-    const fy = (step * ry)
+           // fast approximation of square root
+            function sqrt(num) {
+              // divide by 3 for first guess 
+              var lastGuess, guess = num / 3;
+              // loop until accurate
+              do {
+                lastGuess = guess;
+                guess = (num / guess + guess) / 2;
+              } while (Math.abs(lastGuess - guess) > 5e-15);
+              return guess;
+            };
+            
+            // get distance2 between centers of mass
+            var r2 = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2); 
 
-            planet.velocityX += fx
-            planet.velocityY += fy
-            console.log(rx)
+            // calculate unit vectors
+            const rhatx = rx / sqrt(r2)
+            const rhaty = ry / sqrt(r2)
 
+            // calculate acceleration
+            const stepx = (g * ((ref.mass)) / r2) * rhatx
+            const stepy = (g * ((ref.mass)) / r2) * rhaty
+            const ax = (stepx * ref.mass)
+            const ay = (stepy * ref.mass)
+
+            // add up the acceleration to velocity
+            planet.velocityX += ax
+            planet.velocityY += ay
+
+            // log the unit vector of x
+            console.log(rhatx)
+
+            // apply velocity to the location of planet
             planetren.translation.x += planet.velocityX
             planetren.translation.y += planet.velocityY
 
-          } else continue;
+          } else continue; // if the id is the same, continue to other reference
         }
       }
     }
+
+
+
+ // binds update to this function
     two.bind('update', function (frameCount, timeDelta) {
 
+      // TRAIL
+      // every 60 frames places a circle
+      if (frameCount % 60 == 0) {
+        
+        // create a for loop to push them into tarray
+        for (let c = 0; c < rcircles.length; c++) {
+          // variables of x and y
+          let x = circles[c].velocityX
+          let y = circles[c].velocityY
+
+          // checks if any of these velocities is above 0.1 or below -0.1
+          // if they are, push the circle into the array
+          if (x > 0.1 || y > 0.1 || x < -0.1 || y < -0.1) {
+            tarray.push(two.makeCircle(rcircles[c].translation.x, rcircles[c].translation.y, 3, 20))
+          }
+          // while tarray is longer than 20 objects
+          while (tarray.length > 20) {
+            // remove the last element from the array
+            let last = tarray.shift()
+            console.log(last)
+            last.remove()
+
+          }
+
+        }
+      }
+      // calls the function to update the frame
       updatecircle()
     });
   </script>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="js/two.min.js"></script>
+</head>
+
+<body>
+  <script>
+    var two = new Two({
+      fullscreen: true,
+      autostart: true
+    }).appendTo(document.body);
+    two.renderer.domElement.style.background = 'rgb(50, 50, 50)';
+    let circle = class {
+      constructor(x, y, mass, radius, vx, vy, id) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius
+        this.velocityX = vx
+        this.velocityY = vy
+        this.mass = mass
+        this.id = id
+      }
+    }
+
+    const circles = []
+    const rcircles = []
+
+    circles.push(new circle(2900, 1800, 10, 20, -0.3, -0.3, 1))
+    circles.push(new circle(2800, 1800, 10, 20, 0.3, 0.3, 2))
+    circles.push(new circle(900, 1800, 10, 20, 0.5, 0.2, 3))
+    // circles.push(new circle(0, 1800, 1, 20, 0, 0, 4))
+
+    rcircles.push(two.makeCircle(2900, 1800, 20, 20))
+    rcircles.push(two.makeCircle(2500, 1800, 20, 20))
+    rcircles.push(two.makeCircle(900, 1800, 20, 20))
+    // rcircles.push(two.makeCircle(0, 1800, 20, 20))
+
+    function updatecircle() {
+      for (let i = 0; i < circles.length; i++) {
+        for (let j = 0; j < circles.length; j++) {
+          if (circles[i].id != circles[j].id) {
+
+            const planet = circles[i]
+            const planetren = rcircles[i]
+            const ref = circles[j]
+            const refren = rcircles[j]
+
+            const rx = refren.translation.x - planetren.translation.x
+            const ry = refren.translation.y - planetren.translation.y
+            
+            const rx2 = planetren.translation.x - refren.translation.x
+            const ry2 = planetren.translation.y - refren.translation.y
+            
+
+            var r2 = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2); // distance between centers of mass
+            const rhatx = rx / Math.sqrt(r2)
+            const rhaty = ry / Math.sqrt(r2)
+            const g = 20 // gravitational constant
+            const step = (g * ((planet.mass * ref.mass)) / r2)
+            const ax = (step * rhatx)
+            const ay = (step * rhaty)
+
+            planet.velocityX += ax
+            planet.velocityY += ay
+            console.log(rhatx)
+
+            planetren.translation.x += planet.velocityX
+            planetren.translation.y += planet.velocityY
+
+          } else continue;
+        }
+      }
+    }
+    two.bind('update', function (frameCount, timeDelta) {
+
+      updatecircle()
+    });
+  </script>
+</body>
+
+</html>
