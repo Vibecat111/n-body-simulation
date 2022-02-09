@@ -11,7 +11,7 @@ Some parts of it are probably(Definetely) calculated wrong, but i don't know how
 
 ## Todo
 1. Movable background
-2. Ui
+2. Ui(in progress, check branches)
 3. Make trails nicer
 
 
