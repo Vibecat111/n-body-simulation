@@ -13,28 +13,20 @@
     let circles = [{
         "x": 1000,
         "y": 500,
-        "mass": 8.1,
+        "mass": 20,
         "radius": 20,
-        "velocityX": 0,
-        "velocityY": 0,
+        "velocityX": -0.2,
+        "velocityY": -0.2,
       },
       {
         "x": 1000,
         "y": 250,
-        "mass": 0.01,
-        "radius": 9,
-        "velocityX": 0.125,
-        "velocityY": 0,
+        "mass": 20,
+        "radius": 20,
+        "velocityX": 0.2,
+        "velocityY": 0.2,
       },
 
-      {
-        "x": 1000,
-        "y": 750,
-        "mass": 0.02,
-        "radius": 9,
-        "velocityX": -0.125,
-        "velocityY": 0,
-      },
  
     ]
 
@@ -115,11 +107,16 @@
 
 
     two.bind('update', function (frameCount, timeDelta) {
-
+      if (frameCount % 10 == 0) {
       for(let i=0; i< rcircles.length; i++) {
-       document.getElementById(`p${i}`).innerHTML = `Planet ${i}: ${rcircles[i].translation.x}  ${rcircles[i].translation.y}`;
+       document.getElementById(`p${i}`).innerHTML = `Planet ${i}: <br>  
+       X: ${rcircles[i].translation.x.toFixed(2)} <br> 
+       Y: ${rcircles[i].translation.y.toFixed(2)} <br>
+       X Speed/s: ${(circles[i].velocityX * 1000 / timeDelta).toFixed(2)} <br> 
+       Y Speed/s: ${(circles[i].velocityY * 1000 / timeDelta).toFixed(2)}`;
 
       }
+    }
 
       // TRAIL
       // every 60 frames places a circle
