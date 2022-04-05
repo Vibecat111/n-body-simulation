@@ -73,18 +73,20 @@
             var r2 = Math.pow(rx2 - rx, 2) + Math.pow(ry2 - ry, 2);
 
             // calculate unit vectors
-            const rhatx = rx / Math.sqrt(r2)
-            const rhaty = ry / Math.sqrt(r2)
+            const rhatx = (rx / Math.sqrt(r2))
+            const rhaty = (ry / Math.sqrt(r2))
 
-            // calculate acceleration
-            const stepx = (g * ((ref.mass)) / r2) * rhatx
-            const stepy = (g * ((ref.mass)) / r2) * rhaty
-            const ax = (stepx * ref.mass)
-            const ay = (stepy * ref.mass)
+            // calculate the force exerted on the planet
+            const F = g * planet.mass * ref.mass / r2
+            // get the components of the force
+            const Fx = F * rhatx
+            const Fy = F * rhaty
+            // apply the force to acceleration
+            planet.velocityX += Fx 
+            planet.velocityY += Fy 
 
-            // add up the acceleration to velocity
-            planet.velocityX += ax
-            planet.velocityY += ay
+
+        
 
             // log the unit vector of x
             console.log(rhatx)
@@ -118,32 +120,52 @@
       }
     }
 
+
+
+    
       // TRAIL
       // every 60 frames places a circle
-      if (frameCount % 60 == 0) {
+     
 
-        // create a for loop to push them into tarray
+       // create a trail for the planets using two.makeCurve()
+        // the trail is a line between the planet and the previous frame
+        // the trail is made up of two points, the current location and the previous location
+        // the trail is created using the two.makeCurve() function
+        if (frameCount % 2 == 0) {
         for (let c = 0; c < rcircles.length; c++) {
-          // variables of x and y
-          let x = circles[c].velocityX
-          let y = circles[c].velocityY
+        let trail = two.makeCurve(rcircles[c].translation.x, rcircles[c].translation.y, rcircles[c].translation.x - circles[c].velocityX, rcircles[c].translation.y - circles[c].velocityY)
+        // set the color of the trail
+        trail.linewidth = 5
+        //increase the size of the trail
+        trail.scale = 2
 
-          // checks if any of these velocities is above 0.1 or below -0.1
-          // if they are, push the circle into the array
-          if (x > 0.1 || y > 0.1 || x < -0.1 || y < -0.1) {
-            tarray.push(two.makeCircle(rcircles[c].translation.x, rcircles[c].translation.y, 3, 1))
-          }
-          // while tarray is longer than 10 * length objects
-          while (tarray.length > 10 * circles.length) {
-            // remove the last element from the array
-            let last = tarray.shift()
-            console.log(last)
-            last.remove()
 
-          }
+        trail.stroke = '#2ff3ff'
+        trail.closed = true
+        
+        trail.noFill()
+        tarray.push(trail)
+      
+        
+
+
+        while (tarray.length > 100 * circles.length) {
+          // remove the last element from the array
+          let last = tarray.shift()
+          console.log(last)
+          last.remove()
 
         }
       }
+    }
+        
+    
+     
+        
+
+       
+
+      
       // calls the function to update the frame
       updatecircle()
     });
